@@ -42,36 +42,25 @@
 				<thead>
 					<tr>
 						<th scope="col">#</th>
+						<th scope="col">ID</th>
 						<th scope="col">Name</th>
 						<th scope="col">Latidute</th>
 						<th scope="col">Longitude</th>
 					</tr>
 				</thead>
 				<tbody>
-					<!--<tr>
-						<th scope="row">1</th>
-						<td>Basel</td>
-						<td>47.558588</td>
-						<td>7.588966</td>
-					</tr>
-					<tr>
-						<th scope="row">2</th>
-						<td>Basel 2</td>
-						<td>49</td>
-						<td>10</td>
-					</tr>-->
+
 				</tbody>
 			</table>
+
+			<button id="btnLoadDefault" class="btn btn-info">Load Default Data</button>
+			<button id="btnRemoveAll" class="btn btn-danger">Remove All</button>
 		</p>
 
 		<p>
 			<hr class="divider">
 			<button id="btnToMap" class="btn btn-default">Jump to Map</button>
 		</p>
-
-		<div class="hidden">
-			<div id="markers" count="0"></div>
-		</div>
 
 		<script>
 			$(document).ready(function () {
@@ -80,6 +69,24 @@
 					$("html, body").animate({
 						scrollTop: 0
 					}, 500);
+				});
+
+				$('table').on('click', 'tr button.remove', function (e) {
+					e.preventDefault();
+
+					var rowId = $(this).closest('tr').find('th').attr('id');
+					removeMarker(rowId);
+
+					$(this).closest('tr').remove();
+					renumberRows();
+				});
+
+				$('#btnLoadDefault').click(function () {
+					loadDefault();
+				});
+
+				$('#btnRemoveAll').click(function () {
+					removeAllMarkers();
 				});
 
 			});

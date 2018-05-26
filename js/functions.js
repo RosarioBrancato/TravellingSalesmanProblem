@@ -1,54 +1,98 @@
+//VARIABLES
+var labels = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+var labelIndex = 0;
+
+var map;
+var markers = [];
+
+//FUNCTIONS
 function initMap() {
-    var basel = { lat: 47.558588, lng: 7.588966 };
+    map = new google.maps.Map(document.getElementById('map'));
 
-    var map = new google.maps.Map(document.getElementById('map'), {
-        zoom: 5,
-        center: basel
-    });
-    
     map.addListener('click', function (e) {
-        placeMarkerAndPanTo(e.latLng, map);
+        createMarker("", e.latLng.lat(), e.latLng.lng());
     });
 
-    var marker = new google.maps.Marker({
-        position: basel,
-        map: map
-    });
-    marker.setLabel("Basel");
-    saveMarker(marker);
-
-    var marker = new google.maps.Marker({
-        position: { lat: 49, lng: 10 },
-        map: map
-    });
-    marker.setLabel("Basel 2");
-    saveMarker(marker);
+    loadDefault();
 }
 
-function placeMarkerAndPanTo(latLng, map) {
+function createMarker(name, lat, lng) {
+    var id = getNextMarkerId();
+
     var marker = new google.maps.Marker({
-        position: latLng,
+        position: { lat: lat, lng: lng },
+        label: id,
         map: map
     });
     //map.panTo(latLng);
-    saveMarker(marker);
+
+    markers.push(marker);
+
+    var html = "";
+    html += '<tr>';
+    html += '   <th id="row' + markers.length + '" scope="row">' + markers.length + '</th>';
+    html += '   <td>' + id + '</td>';
+    html += '   <td><input type="text" class="form-control" maxlen="20" value="' + name + '" /></td>';
+    html += '   <td>' + lat + '</td>';
+    html += '   <td>' + lng + '</td>';
+    html += '   <td><button class="btn btn-danger remove" tabindex="-1">Remove</button></td>';
+    html += '</tr>';
+    $("tbody").append(html);
 }
 
-function saveMarker(marker) {
-    if (marker != null) {
-        var count = parseInt($("#markers").attr("count"));
-        count = count + 1;
+function getNextMarkerId() {
+    return labels[labelIndex++ % labels.length];
+}
 
-        var lat = marker.getPosition().lat().toString();
-        var lng = marker.getPosition().lng().toString();
-        $("#markers").append("<marker lat=\"" + lat + "\" lng=\"" + lng + "\" />");
+function loadDefault() {
+    $.ajax({
+        type: "GET",
+        url: "citydata/CityCoordinates.csv",
+        dataType: "text",
+        success: function (data) { processData(data); }
+    });
+}
 
-        var name = marker.getLabel();
-        if(name == null) {
-            name = "";
-        }
-        $("tbody").append('<tr><th scope="row">' + count + '</th><td>' + name + '</td><td>' + lat + '</td><td>' + lng + '</td></tr>');
+function processData(data) {
+    removeAllMarkers();
 
-        $("#markers").attr("count", count);
+    var allTextLines = data.split(/\r\n|\n/);
+
+    for (var i = 1; i < allTextLines.length; i++) {
+        var data = allTextLines[i].split(',');
+
+        createMarker(data[1], parseFloat(data[2]), parseFloat(data[3]));
     }
+
+    map.setCenter({ lat: 36, lng: 69 })
+    map.setZoom(3);
+}
+
+function renumberRows() {
+    var number = 1;
+
+    $('tbody').children('tr').each(function () {
+        var th = $(this).children('th');
+        $(th).attr('id', 'row' + number);
+        $(th).html(number);
+
+        number++;
+    });
+}
+
+function removeMarker(rowId) {
+    var id = rowId.substring(3);
+    var marker = markers[id - 1];
+    marker.setMap(null);
+    markers.splice(id - 1, 1);
+}
+
+function removeAllMarkers() {
+    for (var i = 0; i < markers.length; i++) {
+        markers[i].setMap(null);
+    }
+    markers = [];
+    labelIndex = 0;
+
+    $('tbody').empty();
 }
