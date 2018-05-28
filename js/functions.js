@@ -7,13 +7,15 @@ var markers = [];
 
 //FUNCTIONS
 function initMap() {
-    map = new google.maps.Map(document.getElementById('map'));
+    map = new google.maps.Map(document.getElementById('map'),
+        {
+            center: { lat: 47.545763, lng: 7.594920 },
+            zoom: 5
+        });
 
     map.addListener('click', function (e) {
         createMarker("", e.latLng.lat(), e.latLng.lng());
     });
-
-    loadDefault();
 }
 
 function createMarker(name, lat, lng) {
@@ -44,13 +46,20 @@ function getNextMarkerId() {
     return labels[labelIndex++ % labels.length];
 }
 
-function loadDefault() {
-    $.ajax({
-        type: "GET",
-        url: "citydata/CityCoordinates.csv",
-        dataType: "text",
-        success: function (data) { processData(data); }
-    });
+function importLocations() {
+    var file = document.getElementById('fileChooser').files[0];
+
+    if (file != null) {
+        var reader = new FileReader();
+
+        reader.onload = function (e) {
+            var data = reader.result;
+
+            processData(data);
+        }
+
+        reader.readAsText(file, "UTF-8");
+    }
 }
 
 function processData(data) {
