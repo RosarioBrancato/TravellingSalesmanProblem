@@ -73,8 +73,8 @@ function processData(data) {
         createMarker(data[1], parseFloat(data[2]), parseFloat(data[3]));
     }
 
-    map.setCenter({ lat: 36, lng: 69 })
-    map.setZoom(3);
+    map.setCenter({ lat: 47.545763, lng: 7.594920 })
+    map.setZoom(2);
 }
 
 function renumberRows() {
