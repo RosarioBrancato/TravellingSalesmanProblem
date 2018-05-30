@@ -105,3 +105,9 @@ function removeAllMarkers() {
 
     $('tbody').empty();
 }
+
+
+function calculate() {
+    var alg = new TSPAlgorithm(this.markers);
+    alg.calculateDistances();
+}

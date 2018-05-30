@@ -18,7 +18,6 @@
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 
 	<link rel="stylesheet" type="text/css" href="css/style.css">
-	<script src="js/functions.js"></script>
 </head>
 
 <body>
@@ -30,11 +29,13 @@
 			</h5>
 		</div>
 
+		<p>
 		<p id="mapParagraph">
 			<h2>Map</h2>
 			<div id="map"></div>
 		</p>
-
+		<button id="btnCalculate" class="btn btn-primary">Calculate</button>
+	</p>
 
 		<p>
 			<hr class="divider">
@@ -81,6 +82,10 @@
 			<button id="btnToMap" class="btn btn-default">Jump to Map</button>
 		</p>
 
+		
+		<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBBxwM--fjlee2TOyA4kKpLY1xCMmVpJXo&callback=initMap&libraries=geometry"></script>
+		<script src="js/tsp.js"></script>
+		<script src="js/functions.js"></script>
 		<script>
 			$(document).on('change', '.btn-file :file', function () {
 				var input = $(this),
@@ -107,6 +112,10 @@
 					renumberRows();
 				});
 
+				$('#btnCalculate').click(function () {
+					calculate();
+				});
+
 				$('#btnImport').click(function () {
 					importLocations();
 				});
@@ -128,7 +137,6 @@
 
 			});
 		</script>
-		<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBBxwM--fjlee2TOyA4kKpLY1xCMmVpJXo&callback=initMap"></script>
 	</div>
 </body>
 
