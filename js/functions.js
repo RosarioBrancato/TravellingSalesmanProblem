@@ -4,6 +4,7 @@ var labelIndex = 0;
 
 var map;
 var markers = [];
+var flightPath;
 
 //FUNCTIONS
 function initMap() {
@@ -19,6 +20,8 @@ function initMap() {
 }
 
 function createMarker(name, lat, lng) {
+    removeFlightPath();
+
     var id = getNextMarkerId();
 
     var marker = new google.maps.Marker({
@@ -90,6 +93,8 @@ function renumberRows() {
 }
 
 function removeMarker(rowId) {
+    removeFlightPath();
+
     var id = rowId.substring(3);
     var marker = markers[id - 1];
     marker.setMap(null);
@@ -97,6 +102,8 @@ function removeMarker(rowId) {
 }
 
 function removeAllMarkers() {
+    removeFlightPath();
+
     for (var i = 0; i < markers.length; i++) {
         markers[i].setMap(null);
     }
@@ -106,8 +113,70 @@ function removeAllMarkers() {
     $('tbody').empty();
 }
 
+function removeFlightPath() {
+    $('#solution').html(' ');
+
+    if(this.flightPath != null) {
+        this.flightPath.setMap(null);
+    }
+}
 
 function calculate() {
-    var alg = new TSPAlgorithm(this.markers);
-    alg.calculateDistances();
+    $('#solution').html(' ');
+    var startIndex = 0;
+
+    var alg = new TSPAlgorithm(this.markers, startIndex);
+    alg.calculate();
+
+
+    if (alg.solutions.length > 0) {
+        var solution = alg.solutions[alg.solutions.length - 1];
+
+        var totalCosts = solution.totalCosts / 1000; //from m to km
+        totalCosts = $.number(totalCosts, 2, '.', '\'');
+
+        $('#solution').html('Distance: ' + totalCosts + ' km; Path: ');
+
+        var i;
+        var flightPlanCoordinates = new Array(solution.path.length + 1);
+        var markerLabels = new Array(solution.path.length + 1);
+
+        for (i = 0; i < solution.path.length; i++) {
+            var index = solution.path[i];
+
+            flightPlanCoordinates[index] = this.markers[i].getPosition();
+            markerLabels[index] = this.markers[i].getLabel();
+        }
+
+        flightPlanCoordinates[flightPlanCoordinates.length - 1 ] = flightPlanCoordinates[0];
+        markerLabels[markerLabels.length - 1] = markerLabels[0];
+
+        var solutionText = '';
+        for(i = 0; i < markerLabels.length; i++) {
+            solutionText += markerLabels[i];
+
+            if(i < (markerLabels.length - 1)) {
+                solutionText += ', ';
+            }
+        }
+        $('#solution').append(solutionText);
+
+        //GOOGLE MAPS LINE
+        flightPath = new google.maps.Polyline({
+            path: flightPlanCoordinates,
+            geodesic: true,
+            strokeColor: '#FF0000',
+            strokeOpacity: 1.0,
+            strokeWeight: 2,
+            icons: [{
+                icon: {path: google.maps.SymbolPath.FORWARD_CLOSED_ARROW},
+                offset: '100%',
+                repeat: '150px'
+            }]
+        });
+        flightPath.setMap(this.map);
+
+    } else {
+        $('#solution').html('No solution found!');
+    }
 }

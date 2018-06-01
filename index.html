@@ -30,12 +30,14 @@
 		</div>
 
 		<p>
-		<p id="mapParagraph">
-			<h2>Map</h2>
-			<div id="map"></div>
+			<p id="mapParagraph">
+				<h2>Map</h2>
+				<div id="map"></div>
+			</p>
+			<button id="btnCalculate" class="btn btn-primary">Calculate</button>
 		</p>
-		<button id="btnCalculate" class="btn btn-primary">Calculate</button>
-	</p>
+		
+		<p id="solution"></p>
 
 		<p>
 			<hr class="divider">
@@ -82,8 +84,10 @@
 			<button id="btnToMap" class="btn btn-default">Jump to Map</button>
 		</p>
 
-		
+
 		<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBBxwM--fjlee2TOyA4kKpLY1xCMmVpJXo&callback=initMap&libraries=geometry"></script>
+		<script src="js/jquery.number.min.js"></script>
+		<script src="js/solution.js"></script>
 		<script src="js/tsp.js"></script>
 		<script src="js/functions.js"></script>
 		<script>
