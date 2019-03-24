@@ -116,7 +116,7 @@ function removeAllMarkers() {
 function removeFlightPath() {
     $('#solution').html(' ');
 
-    if(this.flightPath != null) {
+    if (this.flightPath != null) {
         this.flightPath.setMap(null);
     }
 }
@@ -148,14 +148,14 @@ function calculate() {
             markerLabels[index] = this.markers[i].getLabel();
         }
 
-        flightPlanCoordinates[flightPlanCoordinates.length - 1 ] = flightPlanCoordinates[0];
+        flightPlanCoordinates[flightPlanCoordinates.length - 1] = flightPlanCoordinates[0];
         markerLabels[markerLabels.length - 1] = markerLabels[0];
 
         var solutionText = '';
-        for(i = 0; i < markerLabels.length; i++) {
+        for (i = 0; i < markerLabels.length; i++) {
             solutionText += markerLabels[i];
 
-            if(i < (markerLabels.length - 1)) {
+            if (i < (markerLabels.length - 1)) {
                 solutionText += ', ';
             }
         }
@@ -169,7 +169,7 @@ function calculate() {
             strokeOpacity: 1.0,
             strokeWeight: 2,
             icons: [{
-                icon: {path: google.maps.SymbolPath.FORWARD_CLOSED_ARROW},
+                icon: { path: google.maps.SymbolPath.FORWARD_CLOSED_ARROW },
                 offset: '100%',
                 repeat: '150px'
             }]

@@ -26,25 +26,11 @@ class TSPAlgorithm {
             }
         }
 
-        //console.log(this.distances);
-
         var indicesUsed = new Array(this.distances.length);
-        //console.log(indicesUsed);
         this.calculateCosts(this.cloneArray2D(this.distances), 0, this.cloneArray1D(indicesUsed), -1, this.start, 0);
-
-        //console.log("THE SOLUTIONS");
-        //console.log(this.solutions);
     }
 
     calculateCosts(prevReducedArray, prevCosts, indicesUsed, prevIndex, newIndex, newPosition) {
-        //console.log("VARIABLES");
-        //console.log(prevReducedArray);
-        //console.log("PrevCosts: " + prevCosts);
-        //console.log(indicesUsed);
-        //console.log("PrevIndex: " + prevIndex);
-        //console.log(newIndex);
-        //console.log("Position: " + newPosition);
-
         var i;
         var k;
         var genLength = this.distances.length;
@@ -59,11 +45,9 @@ class TSPAlgorithm {
         if (newPosition > 0) {
             //cost from prevIndex(row) and newIndex(col)
             costs = prevReducedArray[prevIndex][newIndex];
-            //console.log("Akt. in Arr: " + costs);
 
             //costs of last node
             costs += prevCosts;
-            //console.log("Akt. Costs: " + costs);
 
             //make row of prevIndex to infinity
             for (k = 0; k < genLength; k++) {
@@ -77,9 +61,6 @@ class TSPAlgorithm {
 
             //you cannot jump back so make the distance to infinity
             prevReducedArray[newIndex][prevIndex] = -1;
-
-            //console.log("prevReducedArray");
-            //console.log(prevReducedArray);
         }
 
         //FIND MIN DISTANCES PER ROW
@@ -104,23 +85,17 @@ class TSPAlgorithm {
             minRow[i] = min;
         }
 
-        //console.log("get min value of rows");
-        //console.log(minRow);
-
         //CLONE AND REDUCE ARRAY
         var reducedArray = new Array(genLength);
         for (i = 0; i < genLength; i++) {
             reducedArray[i] = new Array(genLength);
             var reduction = minRow[i];
-            //console.log("Reduction: " + reduction);
 
             for (k = 0; k < genLength; k++) {
                 var distance = prevReducedArray[i][k];
-                //console.log("Distance: " + distance);
 
                 if (distance != -1) {
                     var result = (distance - reduction);
-                    //console.log("Result: " + result);
                     reducedArray[i][k] = result;
                 } else {
                     reducedArray[i][k] = -1;
@@ -128,15 +103,9 @@ class TSPAlgorithm {
             }
         }
 
-        //console.log("Reduced Array");
-        //console.log(reducedArray);
-
-
         for (i = 0; i < minRow.length; i++) {
             costs += minRow[i];
         }
-
-        //console.log("Costs :" + costs);
 
         //FIND MIN DISTANCES PER COL
         for (k = 0; k < genLength; k++) {
@@ -160,9 +129,6 @@ class TSPAlgorithm {
             minCol[k] = min;
         }
 
-        //console.log("get min value of cols");
-        //console.log(minCol);
-
         //REDUCE CLONED ARRAY BY COL
         for (k = 0; k < genLength; k++) {
             for (i = 0; i < genLength; i++) {
@@ -175,14 +141,11 @@ class TSPAlgorithm {
                 }
             }
         }
-        //console.log("Reduced Array");
-        //console.log(reducedArray);
 
         //COSTS
         for (i = 0; i < genLength; i++) {
             costs += minCol[i];
         }
-        //console.log("Costs: " + costs);
 
 
         //SET UP FOR RECURSION
@@ -190,7 +153,6 @@ class TSPAlgorithm {
 
         for (i = 0; i < this.solutions.length; i++) {
             if (costs > this.solutions[i].totalCosts) {
-                //console.log("RETURN");
                 return;
             }
         }
@@ -207,7 +169,6 @@ class TSPAlgorithm {
         } else {
             //END OF RECURSION - ADD SOLUTION
             this.solutions.push(new Solution(costs, indicesUsed));
-            //console.log("SOLUTION FOUND");
         }
     }
 
