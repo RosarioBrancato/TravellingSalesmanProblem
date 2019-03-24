@@ -84,8 +84,11 @@
 			<button id="btnToMap" class="btn btn-default">Jump to Map</button>
 		</p>
 
-
-		<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBBxwM--fjlee2TOyA4kKpLY1xCMmVpJXo&callback=initMap&libraries=geometry"></script>
+		<script src="js/keys.js"></script>
+		<script>
+			var googleMapsApiUrl = 'https://maps.googleapis.com/maps/api/js?key=' + getGoogleMapsApiKey() + '&callback=initMap&libraries=geometry';
+			$.getScript(googleMapsApiUrl);
+		</script>
 		<script src="js/jquery.number.min.js"></script>
 		<script src="js/solution.js"></script>
 		<script src="js/tsp.js"></script>
