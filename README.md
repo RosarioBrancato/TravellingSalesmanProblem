@@ -1,5 +1,5 @@
 # TravellingSalesmanProblem
-The repository contains a small front-end only website, which solves the travelling salesman problem.
+The repository contains a simple website, which solves the travelling salesman problem.
 
 ## Product Description
 - Google Maps are used.
